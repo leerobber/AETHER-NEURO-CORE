@@ -110,6 +110,20 @@ class MultiCompartmentNeuronEngine:
 
         self.compartments = compartments
         self.names = [c.name for c in compartments]
+
+        seen: set = set()
+        duplicates: List[str] = []
+        for name in self.names:
+            if name in seen and name not in duplicates:
+                duplicates.append(name)
+            seen.add(name)
+        if duplicates:
+            raise ValueError(
+                f"Duplicate compartment name(s): {', '.join(sorted(duplicates))}. "
+                "Compartment names must be unique for name-based indexing and "
+                "parent resolution to be unambiguous."
+            )
+
         self._index = {name: i for i, name in enumerate(self.names)}
         n = len(compartments)
 

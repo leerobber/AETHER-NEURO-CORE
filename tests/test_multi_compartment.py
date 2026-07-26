@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 from aether_neuro_core.engines.hodgkin_huxley_vec import HighThroughputHHEngine, detect_spikes
 from aether_neuro_core.engines.multi_compartment import Compartment, MultiCompartmentNeuronEngine
@@ -16,6 +17,13 @@ def test_builds_valid_topology_and_indices():
     assert engine.index_of("dend") == 1
     assert engine.root == 0
     assert set(engine.topo_order.tolist()) == {0, 1}
+
+
+def test_duplicate_compartment_names_are_rejected():
+    soma = Compartment(name="soma", parent=None, diam_um=20.0, length_um=20.0)
+    dupe = Compartment(name="soma", parent="soma", diam_um=2.0, length_um=200.0)
+    with pytest.raises(ValueError, match="soma"):
+        MultiCompartmentNeuronEngine([soma, dupe])
 
 
 def test_no_axial_coupling_matches_independent_hh_neurons():

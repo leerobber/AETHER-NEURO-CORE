@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aether-neuro-core"
+version = "0.1.0"
+description = "Biophysical Hodgkin-Huxley simulation framework bridging molecular metadata to vectorized neuron models"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "torch>=2.0.0",
+    "matplotlib>=3.7.0",
+    "nest-asyncio>=1.5.6",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.3.0", "pytest-asyncio>=0.21.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
